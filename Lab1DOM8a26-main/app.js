@@ -8,40 +8,58 @@ const estadoUI = $('#estadoUI');
 const setEstado = (msg) => { estadoUI.textContent = msg; };
 setEstado('Listo');
 
-const btnCambiar= $('#btnCambiarMensaje');
+const btnCambiar = $('#btnCambiarMensaje');
 const titulo = $('#tituloPrincipal');
 const subtitulo = $('#subtitulo');
 
-// Manejo de eventos
-btnCambiar.addEventListener('click', () => {
+// Manejador del evento click del botón
+btnCambiar.addEventListener('click', () => { 
     const alt = titulo.dataset.alt === '1';
 
     titulo.textContent = alt
-    ? 'Bluee Beatle 18 de Agosto Solo en Cines'
-    : '¡A los toxicos los reporto!';
+        ? 'Haz sido troleado por JavaScript'
+        : 'Bienvenido a la aplicación de ejemplo';
 
     subtitulo.textContent = alt
-    ? '¡No te pierdas la nueva aventura del superhéroe azul!'
-    : '¡Prepárate para una experiencia cinematográfica inolvidable!';
+        ? '¡Sorpresa! Este es un mensaje alternativo.'
+        : 'Esta es una aplicación sencilla para demostrar manipulación del DOM.';
 
     titulo.dataset.alt = alt ? '0' : '1';
-    setEstado('Mensaje cambiado');
+    setEstado('Textos actualizados');
 });
 
-//manejador del evento mouseover de los artículos
-const listaArticulos = $('#listaArticulos');
+// Manejador del evento mouseover de los artículos
+const listaArticulos =$('#listaArticulos');
 
 listaArticulos.addEventListener('mouseover', (e) => {
     const card = e.target.closest('.card');
-    if (!card)
-        return;
+    if (!card) return;
     card.classList.add('is-highlight');
 });
 
-//manejador del evento mouseout de los artículos
+// Manejador del evento mouseout de los artículos
 listaArticulos.addEventListener('mouseout', (e) => {
-    const card = e.target.closest('.card');
-    if (!card)
-        return;
+     const card = e.target.closest('.card');
+    if (!card) return;
     card.classList.remove('is-highlight');
+});
+
+//agregar elementos al DOM de forma dinámica
+const btnAgregarCard = $('#btnAgregarCard');
+const listaArticulosDiv = $('#listaArticulos');
+
+btnAgregarCard.addEventListener('click', () => {
+    const article = document.createElement('article');
+    article.className = 'card';
+    article.dataset.tags = 'nuevo';
+    article.innerHTML = `
+        <h3 class="card-title">Nueva tarjeta: Agentes del Valorant</h3>
+        <p class="card-text">Valorant es un juego de disparos táctico en primera persona desarrollado por Riot Games.</p>
+         <div class="card-actions"  data-tags="datos">
+              <button class="btn small" type="button" data-action="like">👍 Like</button>
+              <button class="btn small ghost" type="button" data-action="remove">Eliminar</button>
+              <span class="badge" aria-label="likes">0</span>
+            </div>`;
+    listaArticulosDiv.append(article);
+    setEstado('Nueva tarjeta agregada');
 });
