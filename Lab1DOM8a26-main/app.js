@@ -4,6 +4,23 @@
 const $ = (sel, root = document) => root.querySelector(sel);
 const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
+const buildCard= ({title, text, tags}) => {
+    const article = document.createElement('article');
+    article.className = 'card';
+    article.dataset.tags = tags;
+    article.innerHTML = `
+        <h3 class="card-title"></h3>
+        <p class="card-text"></p>
+         <div class="card-actions"  data-tags="datos">
+              <button class="btn small" type="button" data-action="like">👍 Like</button>
+              <button class="btn small ghost" type="button" data-action="remove">Eliminar</button>
+              <span class="badge" aria-label="likes">0</span>
+            </div>`;
+    article.querySelector('.card-title').textContent = title;
+    article.querySelector('.card-text').textContent = text;
+    return article;
+};
+
 const estadoUI = $('#estadoUI');
 const setEstado = (msg) => { estadoUI.textContent = msg; };
 setEstado('Listo');
@@ -49,17 +66,25 @@ const btnAgregarCard = $('#btnAgregarCard');
 const listaArticulosDiv = $('#listaArticulos');
 
 btnAgregarCard.addEventListener('click', () => {
-    const article = document.createElement('article');
-    article.className = 'card';
-    article.dataset.tags = 'nuevo';
-    article.innerHTML = `
-        <h3 class="card-title">Nueva tarjeta: Agentes del Valorant</h3>
-        <p class="card-text">Valorant es un juego de disparos táctico en primera persona desarrollado por Riot Games.</p>
-         <div class="card-actions"  data-tags="datos">
-              <button class="btn small" type="button" data-action="like">👍 Like</button>
-              <button class="btn small ghost" type="button" data-action="remove">Eliminar</button>
-              <span class="badge" aria-label="likes">0</span>
-            </div>`;
-    listaArticulosDiv.append(article);
-    setEstado('Nueva tarjeta agregada');
+   const newCard = buildCard({
+        title: 'Nueva Tarjeta',
+        text: 'Esta tarjeta fue agregada dinámicamente.',
+        tags: 'nueva, dinámica'
+    });
+    listaArticulosDiv.appendChild(newCard);
+    setEstado('Se agregó una nueva tarjeta');
+});
+
+//Eliminar cards al hacer clic en el botón eliminar
+const btnLimpiar = $('#btnLimpiar');
+
+btnLimpiar.addEventListener('click', () => {
+    const cards = $$('#listaArticulos .card');
+    let removed = 0;
+    cards.forEach(card => {
+        if (card.dataset.seed === 'true') return;
+        card.remove();
+        removed++;
+    });
+    setEstado(`Se eliminaron ${removed} tarjetas`);
 });
